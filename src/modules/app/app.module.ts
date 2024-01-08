@@ -11,9 +11,14 @@ import {
   dbServiceName,
   dbUsername,
 } from 'src/config';
+import { Student } from '../students/entities/student.entity';
+import { Group } from '../groups/entities/group.entity';
+import { GroupModule } from '../groups/group.module';
+import { StudentModule } from '../students/student.module';
 
 @Module({
   imports: [
+    // TODO: тоже в конфиг
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: dbServiceName,
@@ -21,10 +26,12 @@ import {
       username: dbUsername,
       password: dbPassword,
       database: dbName,
-      entities: [Poll],
+      entities: [Poll, Student, Group],
       synchronize: true,
     }),
     PollModule,
+    StudentModule,
+    GroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],
