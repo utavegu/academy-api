@@ -4,10 +4,12 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 // import { PersonalData } from 'src/common/personal-data';
 import { CreateUpdateInfo } from 'src/common/create-update-info';
 import { Group } from 'src/modules/groups/entities/group.entity';
+import { Contact } from 'src/modules/contacts/entities/contact.entity';
 
 @Entity()
 export class Student {
@@ -23,8 +25,11 @@ export class Student {
   @Column({ type: 'varchar', length: 30, nullable: true })
   patronymic: string;
 
+  @Column({ type: 'boolean', nullable: true })
+  isMale: boolean;
+
   @Column({ type: 'integer', unique: true })
-  passport: string;
+  passport: number;
 
   // TODO: В идеале так (у педагогов будет повторяться), но пока не так.
   // @Column(() => PersonalData)
@@ -38,5 +43,7 @@ export class Student {
   @JoinColumn({ name: 'group_id' })
   group: Group;
 
-  // контакты - телефон(юник), почта(юник), страна, город, дом, улица, квартира - отдельная таблица со связью 1 к 1
+  @OneToOne(() => Contact, (contact) => contact.student)
+  @JoinColumn()
+  contact: Contact;
 }
