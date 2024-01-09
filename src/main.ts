@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express/interfaces/nest-express-application.interface';
-import { serverPort } from './config';
+import { serverPort } from './config/variables';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
