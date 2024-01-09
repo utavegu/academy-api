@@ -11,6 +11,8 @@ import { CreateUpdateInfo } from 'src/common/create-update-info';
 import { Group } from 'src/modules/groups/entities/group.entity';
 import { Contact } from 'src/modules/contacts/entities/contact.entity';
 
+// TODO: + дата поступления, дата окончания (может быть налл)
+
 @Entity()
 export class Student {
   @PrimaryGeneratedColumn()
@@ -38,7 +40,7 @@ export class Student {
   @Column(() => CreateUpdateInfo)
   changesInfo: CreateUpdateInfo;
 
-  // Разрешит добавить и без указания названия группы (как, и надо ли, исправить это поведение?), но если вбить несуществующую, то будет ругаться.
+  // TODO: Разрешит добавить и без указания названия группы (как, и надо ли, исправить это поведение?), но если вбить несуществующую, то будет ругаться.
   @ManyToOne(() => Group, (group) => group.students)
   @JoinColumn({ name: 'group_id' })
   group: Group;

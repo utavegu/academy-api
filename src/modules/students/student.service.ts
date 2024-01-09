@@ -19,6 +19,7 @@ export class StudentService {
       //   passport: studentData.passport,
       // }})
 
+      // Когда будешь прокидывать реальные данные, тем не менее совсем моки не убирай - в постмановском формате (джейсон) их сохрани, чтобы в случае чего можно было легко тестировать
       const mockStudent = {
         name: 'Сидор',
         surname: 'Иванов',
@@ -42,7 +43,7 @@ export class StudentService {
   }
 
   async getAllStudents(): Promise<Student[]> {
-    // Ну и надо полноценный популэйт делать - забирать только интересуюшие поля из целевых таблиц.
+    // TODO: Забирать только интересуюшие поля из целевых таблиц (тут, вроде, все нужные, но вот пароль, у преподавателей, точно отдавать не надо, даже хэшированный)
     return await this.studentRepository.find({
       relations: {
         group: true,

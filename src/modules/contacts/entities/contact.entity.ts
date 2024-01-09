@@ -1,5 +1,8 @@
 import { Student } from 'src/modules/students/entities/student.entity';
+import { Teacher } from 'src/modules/teachers/entities/teacher.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+
+// TODO: с персонал датой, пожалуй, сделай так же
 
 @Entity()
 export class Contact {
@@ -29,4 +32,7 @@ export class Contact {
 
   @OneToOne(() => Student, (student) => student.contact)
   student: Student;
+
+  @OneToOne(() => Teacher, (teacher) => teacher.contact)
+  teacher: Teacher;
 }

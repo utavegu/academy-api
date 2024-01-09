@@ -1,5 +1,6 @@
-import { Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Entity, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import { Student } from 'src/modules/students/entities/student.entity';
+import { Teacher } from 'src/modules/teachers/entities/teacher.entity';
 
 @Entity()
 export class Group {
@@ -11,4 +12,7 @@ export class Group {
     onDelete: 'NO ACTION',
   })
   students: Student[];
+
+  @OneToOne(() => Teacher, (teacher) => teacher.supervisedGroup)
+  curator: Teacher;
 }
