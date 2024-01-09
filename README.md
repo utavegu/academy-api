@@ -1,73 +1,86 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+Памятка по запуску Postgres и PG-admin:
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+PG Admin будет доступен тут:
+localhost:5050
+Но он долго заводится, потому сначала заход на локалхост выдаст ошибку.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Доступ в него после того, как он заведётся:
+admin@admin.com
+pgadmin4
 
-## Description
+Хост в настройках подключения базы и в регистрации сервера ПГ-админа - это имя сервиса с постгресом! Но если вдруг по каким-то причинам не используется композ - тогда там должен быть localhost.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+После проникновения в ПГ-админ (чтобы подтянуть подключенную базу):
+1) ПКМ по Servers слева-сверху
+2) Register -> Server
+3) General -> Name: которое будет отображаться в админке, любое
+4) Connection:
+Host name/address: ИМЯ СЕРВИСА С БД В КОМПОЗЕ! (не контейнера, сервиса!)
+Port: 5432
+Maintenance database: postgres
+Username: Юзер для подключения к БД (в композе)
+Password: Пароль для подключения к БД (в композе)
+Дальнейший доступ к созданному серверу также будет осуществляться по этому паролю. Можно его запомнить.
 
-## Installation
+В любой непонятной ситуации вычищать вольюмы (и базы, и пг-админа)
 
-```bash
-$ npm install
-```
+---------------------
 
-## Running the app
+Декораторы, которые точно понадобятся:
 
-```bash
-# development
-$ npm run start
+@PrimaryGeneratedColumn() = PRIMARY KEY AUTO_INCREMENT (лучше делать намбер)
 
-# watch mode
-$ npm run start:dev
+@PrimaryColumn() - а это без автоинкремента (нужно задавать самому при создании сущности)
+составные первичные ключи - несколько @PrimaryColumn()
 
-# production mode
-$ npm run start:prod
-```
+@CreateDateColumn — это специальный столбец, в котором автоматически устанавливается дата вставки объекта. Вам не нужно задавать этот столбец — он будет установлен автоматически.
 
-## Test
+@UpdateDateColumn — это специальный столбец, в котором автоматически устанавливается время обновления сущности каждый раз, когда вы вызываете saveменеджера сущности или репозиторий. Вам не нужно задавать этот столбец — он будет установлен автоматически.
 
-```bash
-# unit tests
-$ npm run test
+@DeleteDateColumn — это специальный столбец, в котором автоматически устанавливается время удаления объекта каждый раз, когда вы вызываете обратимое удаление менеджера объекта или репозитория. Вам не нужно задавать этот столбец — он будет установлен автоматически. Если установлен @DeleteDateColumn , областью по умолчанию будет «неудаляемый».
 
-# e2e tests
-$ npm run test:e2e
+@Column({ type: "int" }) - столбец таблицы
 
-# test coverage
-$ npm run test:cov
-```
+---------------------
 
-## Support
+Типы столбцов для postgres:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+int, int2, int4, int8, smallint, integer, bigint, decimal, numeric, real, float, float4, float8, double precision, money, character varying, varchar, character, char, text, citext, hstore, bytea, , , bit, varbit, bit varying, timetz, timestamptz, timestamp, timestamp without time zone, timestamp with time zone, date, time, time without time zone, time with time zone, interval, bool, boolean, enum, , point, line, lseg, box, path, polygon, circle, , cidr, inet, macaddr
 
-## Stay in touch
+---------------------
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+ЕНУМКИ:
+export enum UserRole {
+    ADMIN = "admin",
+    EDITOR = "editor",
+    GHOST = "ghost",
+}
 
-## License
+@Entity()
+export class User {
+    @PrimaryGeneratedColumn()
+    id: number
 
-Nest is [MIT licensed](LICENSE).
+    @Column({
+        type: "enum",
+        enum: UserRole,
+        default: UserRole.GHOST,
+    })
+    role: UserRole
+}
+
+---------------------
+
+Опции столбца, которые точно пригодятся:
+
+length: number - Длина типа столбца. Например, если вы хотите создать varchar(150)тип, вы указываете тип столбца и параметры длины.
+
+nullable: boolean - Делает столбец NULLили NOT NULLв базе данных. По умолчанию столбец nullable: false.
+
+select: boolean — Определяет, следует ли скрывать этот столбец по умолчанию при выполнении запросов. Если установлено значение false, данные столбца не будут отображаться при стандартном запросе. По умолчанию столбецselect: true
+
+default: string - Добавляет значение столбца уровня базы данных DEFAULT.
+
+primary: boolean - Помечает столбец как основной. То же самое, если вы используете @PrimaryColumn.
+
+unique: boolean — Помечает столбец как уникальный (создает ограничение уникальности).
