@@ -31,7 +31,7 @@ export class Student {
   @Column({ type: 'integer', unique: true })
   passport: number;
 
-  // TODO: В идеале так (у педагогов будет повторяться), но пока не так.
+  // TODO: В идеале так (у педагогов будет повторяться), но пока не так. Либо тоже связью 1 к 1. Подумаю ещё как лучше.
   // @Column(() => PersonalData)
   // personalData: PersonalData;
 

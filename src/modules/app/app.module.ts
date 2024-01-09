@@ -15,6 +15,8 @@ import { Student } from '../students/entities/student.entity';
 import { Group } from '../groups/entities/group.entity';
 import { GroupModule } from '../groups/group.module';
 import { StudentModule } from '../students/student.module';
+import { Contact } from '../contacts/entities/contact.entity';
+import { ContactsModule } from '../contacts/contacts.module';
 
 @Module({
   imports: [
@@ -26,12 +28,13 @@ import { StudentModule } from '../students/student.module';
       username: dbUsername,
       password: dbPassword,
       database: dbName,
-      entities: [Poll, Student, Group],
+      entities: [Poll, Student, Group, Contact],
       synchronize: true,
     }),
     PollModule,
     StudentModule,
     GroupModule,
+    ContactsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
