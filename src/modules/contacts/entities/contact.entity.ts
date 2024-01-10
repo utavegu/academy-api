@@ -1,14 +1,10 @@
 import { Student } from 'src/modules/students/entities/student.entity';
 import { Teacher } from 'src/modules/teachers/entities/teacher.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, Column, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Contact {
-  // TODO: Праймари ключом можно сделать емэйл или телефон (лучше его, их сложнее размножать, чем почты), но пока оставлю так
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ type: 'varchar', length: 16, unique: true })
+  @PrimaryColumn({ type: 'varchar', length: 16, unique: true })
   phone: string;
 
   @Column({ type: 'varchar', length: 256, unique: true })

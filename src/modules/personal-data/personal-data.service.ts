@@ -13,15 +13,20 @@ export class PersonalDataService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async createPersonalData(data: any): Promise<PersonalData> {
     try {
-      const PersonalData = await this.personalDataRepository.save({
-        name: 'Иван',
-        surname: 'Иванов',
-        patronymic: 'Иванович',
-        birthdate: '1995-10-03',
-        isMale: true,
-        passport: 6622141241, // TODO: Надо поузнавать, есть ли специальный тип для паспортов
-      });
+      const PersonalData = await this.personalDataRepository.save(data);
       return PersonalData;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async findPerson(passport: PersonalData['passport']): Promise<any> {
+    try {
+      const person = await this.personalDataRepository.findOne({
+        where: { passport: passport },
+      });
+
+      return person;
     } catch (err) {
       console.error(err);
     }

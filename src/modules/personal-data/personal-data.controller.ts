@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { PersonalDataService } from './personal-data.service';
+import { PersonalData } from './entities/personal-data.entity';
 
 @Controller('personal')
 export class PersonalDataController {
@@ -13,5 +14,10 @@ export class PersonalDataController {
   @Get()
   getAllPersonalData() {
     return this.personalDataService.getAllPersonalData();
+  }
+
+  @Get(':passport')
+  checkPerson(@Param('passport') passport: PersonalData['passport']) {
+    return this.personalDataService.findPerson(passport);
   }
 }

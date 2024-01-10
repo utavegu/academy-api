@@ -8,5 +8,6 @@ import { PersonalDataService } from './personal-data.service';
   imports: [TypeOrmModule.forFeature([PersonalData])],
   controllers: [PersonalDataController],
   providers: [PersonalDataService],
+  exports: [PersonalDataService],
 })
 export class PersonalDataModule {}

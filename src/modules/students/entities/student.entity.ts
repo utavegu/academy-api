@@ -16,14 +16,14 @@ export class Student {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column(() => CreateUpdateInfo)
-  changesInfo: CreateUpdateInfo;
-
   @Column({ type: 'date' })
   receiptDate: Date;
 
   @Column({ type: 'date', nullable: true })
   deductionDate: Date;
+
+  @Column(() => CreateUpdateInfo)
+  changesInfo: CreateUpdateInfo;
 
   // TODO: Разрешит добавить и без указания названия группы (как, и надо ли, исправить это поведение?), но если вбить несуществующую, то будет ругаться.
   @ManyToOne(() => Group, (group) => group.students)

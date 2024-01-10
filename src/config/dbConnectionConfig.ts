@@ -1,4 +1,3 @@
-import { Poll } from 'src/modules/test/entities/poll.entity';
 import {
   dbName,
   dbPassword,
@@ -21,6 +20,6 @@ export const dbConnectionConfig: TypeOrmModuleOptions = {
   username: dbUsername,
   password: dbPassword,
   database: dbName,
-  entities: [Poll, Student, Group, Contact, Discipline, Teacher, PersonalData],
+  entities: [Student, Group, Contact, Discipline, Teacher, PersonalData],
   synchronize: true,
 };

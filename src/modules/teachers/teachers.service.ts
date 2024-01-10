@@ -15,8 +15,11 @@ export class TeachersService {
     try {
       const newTeacher = await this.teachersRepository.save({
         lastName: 'Никитин',
-        contact: { id: 1 },
-        disciplines: [{ id: 1 }, { id: 2 }],
+        contact: { phone: '+7-922-873-14-51' },
+        disciplines: [
+          { disciplineName: 'Математика' },
+          { disciplineName: 'Русский язык' },
+        ],
         personalData: { passport: 1234567890 },
       });
       return newTeacher;
