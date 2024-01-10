@@ -1,5 +1,3 @@
-// TODO: класс-валидатор
-
 export class CreateStudentDto {
   passport: number;
   name: string;

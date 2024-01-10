@@ -25,7 +25,6 @@ export class Student {
   @Column(() => CreateUpdateInfo)
   changesInfo: CreateUpdateInfo;
 
-  // TODO: Разрешит добавить и без указания названия группы (как, и надо ли, исправить это поведение?), но если вбить несуществующую, то будет ругаться.
   @ManyToOne(() => Group, (group) => group.students)
   @JoinColumn({ name: 'group_id' })
   group: Group;

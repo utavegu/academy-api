@@ -16,7 +16,6 @@ export class StudentService {
     private readonly contactsService: ContactsService,
   ) {}
 
-  // TODO: Транзакция!
   async createStudent({
     passport,
     name,
@@ -62,7 +61,6 @@ export class StudentService {
         flat,
       });
 
-      // TODO: эвэйт считает лишним... ну как скажешь. Видимо тут нет непосредственного обращения к базе, достаточно действий тут. Уточни в документации почему так.
       const newStudent = this.studentRepository.create({
         personalData: { passport: studentPersonalData.passport },
         contact: { phone: studentContact.phone },
@@ -80,9 +78,7 @@ export class StudentService {
     }
   }
 
-  // TODO: квери параметры -> сортировка, поиск, пагинация (лимит, оффсет), разные фильтры
   async getAllStudents(): Promise<Student[]> {
-    // TODO: Забирать только интересуюшие поля из целевых таблиц (тут, вроде, все нужные, но вот пароль, у преподавателей, точно отдавать не надо, даже хэшированный)
     return await this.studentRepository.find({
       relations: {
         personalData: true,

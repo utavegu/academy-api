@@ -4,7 +4,6 @@ import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class PersonalData {
-  // TODO: Почему стал говорить, что интеджер не вмещает по длине? Норм же было. Потестируй ещё через ручку создания персонал даты, не создания студента
   @PrimaryColumn({ type: 'bigint', unique: true })
   passport: number;
 

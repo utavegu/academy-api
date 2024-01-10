@@ -16,7 +16,7 @@ import { PersonalData } from 'src/modules/personal-data/entities/personal-data.e
 export const dbConnectionConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   host: dbServiceName,
-  port: Number(dbPort), // TODO: Ну вот чтобы такой порнухи не было, лучше конечно нестовый конфиг с типизацией и геттерами
+  port: Number(dbPort),
   username: dbUsername,
   password: dbPassword,
   database: dbName,

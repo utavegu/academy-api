@@ -11,13 +11,7 @@ import { Contact } from 'src/modules/contacts/entities/contact.entity';
 import { Discipline } from 'src/modules/disciplines/entities/discipline.entity';
 import { Group } from 'src/modules/groups/entities/group.entity';
 import { PersonalData } from 'src/modules/personal-data/entities/personal-data.entity';
-
-// TODO: вынести в енумс (тайпспэйсез)
-export enum TeacherRole {
-  TEACHER = 'teacher',
-  DEAN = 'dean',
-  RECTOR = 'rector',
-}
+import { TeacherRole } from '../typespaces/enums/teacher-role.enum';
 
 @Entity()
 export class Teacher {
