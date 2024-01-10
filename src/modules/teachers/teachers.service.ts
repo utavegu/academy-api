@@ -17,6 +17,7 @@ export class TeachersService {
         lastName: 'Никитин',
         contact: { id: 1 },
         disciplines: [{ id: 1 }, { id: 2 }],
+        personalData: { passport: 1234567890 },
       });
       return newTeacher;
     } catch (err) {
@@ -27,8 +28,9 @@ export class TeachersService {
   async getAllTeachers(): Promise<Teacher[]> {
     return await this.teachersRepository.find({
       relations: {
-        disciplines: true,
+        personalData: true,
         contact: true,
+        disciplines: true,
       },
     });
   }

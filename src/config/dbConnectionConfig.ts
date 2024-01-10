@@ -12,6 +12,7 @@ import { Contact } from 'src/modules/contacts/entities/contact.entity';
 import { Discipline } from 'src/modules/disciplines/entities/discipline.entity';
 import { Teacher } from 'src/modules/teachers/entities/teacher.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { PersonalData } from 'src/modules/personal-data/entities/personal-data.entity';
 
 export const dbConnectionConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -20,6 +21,6 @@ export const dbConnectionConfig: TypeOrmModuleOptions = {
   username: dbUsername,
   password: dbPassword,
   database: dbName,
-  entities: [Poll, Student, Group, Contact, Discipline, Teacher],
+  entities: [Poll, Student, Group, Contact, Discipline, Teacher, PersonalData],
   synchronize: true,
 };

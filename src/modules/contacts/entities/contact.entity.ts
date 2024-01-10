@@ -2,10 +2,9 @@ import { Student } from 'src/modules/students/entities/student.entity';
 import { Teacher } from 'src/modules/teachers/entities/teacher.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 
-// TODO: с персонал датой, пожалуй, сделай так же
-
 @Entity()
 export class Contact {
+  // TODO: Праймари ключом можно сделать емэйл или телефон (лучше его, их сложнее размножать, чем почты), но пока оставлю так
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -9,6 +9,7 @@ import { ContactsModule } from '../contacts/contacts.module';
 import { DisciplinesModule } from '../disciplines/disciplines.module';
 import { TeachersModule } from '../teachers/teachers.module';
 import { dbConnectionConfig } from 'src/config/dbConnectionConfig';
+import { PersonalDataModule } from '../personal-data/personal-data.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { dbConnectionConfig } from 'src/config/dbConnectionConfig';
     ContactsModule,
     DisciplinesModule,
     TeachersModule,
+    PersonalDataModule,
   ],
   controllers: [AppController],
   providers: [AppService],

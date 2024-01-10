@@ -10,6 +10,7 @@ import {
 import { Contact } from 'src/modules/contacts/entities/contact.entity';
 import { Discipline } from 'src/modules/disciplines/entities/discipline.entity';
 import { Group } from 'src/modules/groups/entities/group.entity';
+import { PersonalData } from 'src/modules/personal-data/entities/personal-data.entity';
 
 // TODO: вынести в енумс (тайпспэйсез)
 export enum TeacherRole {
@@ -22,10 +23,6 @@ export enum TeacherRole {
 export class Teacher {
   @PrimaryGeneratedColumn()
   id: number;
-
-  // TODO: Но далее - личные данные целиком (1 к 1)
-  @Column({ type: 'varchar', length: 30, unique: true })
-  lastName: string;
 
   @Column({ type: 'varchar', length: 20, unique: true })
   login: string;
@@ -49,11 +46,15 @@ export class Teacher {
   @JoinColumn()
   supervisedGroup: Group;
 
-  @OneToOne(() => Contact, (contact) => contact.student)
+  @OneToOne(() => Contact, (contact) => contact.teacher)
   @JoinColumn()
   contact: Contact;
 
   @ManyToMany(() => Discipline, (discipline) => discipline.teachers)
   @JoinTable()
   disciplines: Discipline[];
+
+  @OneToOne(() => PersonalData, (personalData) => personalData.teacher)
+  @JoinColumn()
+  personalData: PersonalData;
 }
