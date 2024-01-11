@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contact } from './entities/contact.entity';
@@ -10,17 +10,37 @@ export class ContactsService {
     private readonly contactsRepository: Repository<Contact>,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async createContact(contactData: any): Promise<Contact> {
     try {
+      const contacts = await this.findContactsByPnoneOrEmail(
+        contactData.phone,
+        contactData.email,
+      );
+      if (contacts.length) {
+        throw new BadRequestException('Такой контакт уже есть в базе!');
+      }
       const newContact = await this.contactsRepository.save(contactData);
       return newContact;
     } catch (err) {
-      console.error(err);
+      throw new HttpException(err.message, err.status || 500);
     }
   }
 
   async getAllContacts(): Promise<Contact[]> {
     return await this.contactsRepository.find();
+  }
+
+  async findContactsByPnoneOrEmail(
+    phone: Contact['phone'],
+    email: Contact['email'],
+  ): Promise<Contact[]> {
+    try {
+      const contacts = await this.contactsRepository.find({
+        where: [{ phone }, { email }],
+      });
+      return contacts;
+    } catch (err) {
+      console.error(err);
+    }
   }
 }

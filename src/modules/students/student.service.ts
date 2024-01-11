@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PersonalDataService } from '../personal-data/personal-data.service';
@@ -35,12 +34,6 @@ export class StudentService {
     groupName,
   }: CreateStudentDto): Promise<Student> {
     try {
-      const person = await this.personalDataService.findPerson(passport);
-
-      if (person) {
-        throw new BadRequestException('Такой студент уже есть в базе!');
-      }
-
       const studentPersonalData =
         await this.personalDataService.createPersonalData({
           passport,

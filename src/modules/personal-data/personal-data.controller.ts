@@ -18,6 +18,6 @@ export class PersonalDataController {
 
   @Get(':passport')
   checkPerson(@Param('passport') passport: PersonalData['passport']) {
-    return this.personalDataService.findPerson(passport);
+    return this.personalDataService.findPersonalDataByPassport(passport);
   }
 }

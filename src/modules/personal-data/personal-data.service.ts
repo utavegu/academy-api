@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PersonalData } from './entities/personal-data.entity';
@@ -10,23 +10,28 @@ export class PersonalDataService {
     private readonly personalDataRepository: Repository<PersonalData>,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async createPersonalData(data: any): Promise<PersonalData> {
     try {
-      const PersonalData = await this.personalDataRepository.save(data);
-      return PersonalData;
+      const personalData = this.findPersonalDataByPassport(data.passport);
+      if (personalData) {
+        throw new BadRequestException('Такой паспорт уже внесен в базу!');
+      }
+      const newPersonalData = await this.personalDataRepository.save(data);
+      return newPersonalData;
     } catch (err) {
-      console.error(err);
+      throw new HttpException(err.message, err.status || 500);
     }
   }
 
-  async findPerson(passport: PersonalData['passport']): Promise<any> {
+  async findPersonalDataByPassport(
+    passport: PersonalData['passport'],
+  ): Promise<PersonalData> {
     try {
-      const person = await this.personalDataRepository.findOne({
-        where: { passport: passport },
+      const personalData = await this.personalDataRepository.findOne({
+        where: { passport },
       });
 
-      return person;
+      return personalData;
     } catch (err) {
       console.error(err);
     }
