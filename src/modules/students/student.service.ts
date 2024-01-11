@@ -1,10 +1,11 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PersonalDataService } from '../personal-data/personal-data.service';
 import { ContactsService } from '../contacts/contacts.service';
 import { Student } from './entities/student.entity';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Injectable()
 export class StudentService {
@@ -66,18 +67,82 @@ export class StudentService {
 
       return saveStudentResponse;
     } catch (err) {
-      console.error(err);
       throw new HttpException(err.message, err.status || 500);
     }
   }
 
   async getAllStudents(): Promise<Student[]> {
-    return await this.studentRepository.find({
-      relations: {
-        personalData: true,
-        contact: true,
-        group: true,
-      },
-    });
+    try {
+      const allStudents = await this.studentRepository.find({
+        relations: {
+          personalData: true,
+          contact: true,
+          group: true,
+        },
+      });
+      return allStudents;
+    } catch (err) {
+      throw new HttpException(err.message, err.status || 500);
+    }
+  }
+
+  async getStudentById(id: Student['id']): Promise<Student> {
+    try {
+      const targetStudent = await this.studentRepository.findOne({
+        where: { id },
+        relations: ['personalData', 'contact', 'group'],
+      });
+      return targetStudent;
+    } catch (err) {
+      throw new HttpException(err.message, err.status || 500);
+    }
+  }
+
+  async removeStudentById(id: Student['id']): Promise<void> {
+    try {
+      await this.studentRepository.delete(id);
+      return;
+    } catch (err) {
+      throw new HttpException(err.message, err.status || 500);
+    }
+  }
+
+  async updateStudent(
+    studentId: Student['id'],
+    data: UpdateStudentDto,
+  ): Promise<any> {
+    try {
+      await this.personalDataService.updatePersonalData(data.passport, {
+        // passport: data.passport, TODO: наводит на мысль, что автоинкрементный числовой айдишник всё-таки был по делу. Либо надо подумать как ещё обновлять.
+        name: data.name,
+        surname: data.surname,
+        patronymic: data.patronymic,
+        birthdate: data.birthdate,
+        isMale: data.isMale,
+      });
+      await this.contactsService.updateContact(data.phone, {
+        // phone: data.phone, TODO: наводит на мысль, что автоинкрементный числовой айдишник всё-таки был по делу. Либо надо подумать как ещё обновлять.
+        email: data.email,
+        country: data.country,
+        city: data.city,
+        street: data.street,
+        house: data.house,
+        flat: data.flat,
+      });
+      const updateStudentResult = await this.studentRepository.update(
+        studentId,
+        {
+          receiptDate: data.receiptDate,
+          deductionDate: data.deductionDate,
+          group: { groupName: data.groupName },
+        },
+      );
+      if (!updateStudentResult.affected) {
+        throw new BadRequestException('Ошибка обновления контакта!');
+      }
+      return 'Обновление данных произведено успешно!';
+    } catch (err) {
+      throw new HttpException(err.message, err.status || 500);
+    }
   }
 }

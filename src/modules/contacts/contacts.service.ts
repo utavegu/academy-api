@@ -1,6 +1,6 @@
 import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { Contact } from './entities/contact.entity';
 
 @Injectable()
@@ -41,6 +41,21 @@ export class ContactsService {
       return contacts;
     } catch (err) {
       console.error(err);
+    }
+  }
+
+  async updateContact(
+    phone: Contact['phone'],
+    data: Omit<Contact, 'phone' | 'student' | 'teacher'>,
+  ): Promise<UpdateResult> {
+    try {
+      const updateResult = await this.contactsRepository.update(phone, data);
+      if (!updateResult.affected) {
+        throw new BadRequestException('Ошибка обновления контакта!');
+      }
+      return updateResult;
+    } catch (err) {
+      throw new HttpException(err.message, err.status || 500);
     }
   }
 }
