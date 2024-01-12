@@ -12,6 +12,7 @@ import { Discipline } from 'src/modules/disciplines/entities/discipline.entity';
 import { Group } from 'src/modules/groups/entities/group.entity';
 import { PersonalData } from 'src/modules/personal-data/entities/personal-data.entity';
 import { TeacherRole } from '../typespaces/enums/teacher-role.enum';
+import { Lecture } from 'src/modules/lectures/entities/lecture.entity';
 
 @Entity()
 export class Teacher {
@@ -51,4 +52,7 @@ export class Teacher {
   @OneToOne(() => PersonalData, (personalData) => personalData.teacher)
   @JoinColumn()
   personalData: PersonalData;
+
+  @OneToOne(() => Lecture, (lecture) => lecture.lector)
+  lecture: Lecture;
 }

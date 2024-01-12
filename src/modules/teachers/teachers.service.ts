@@ -11,10 +11,13 @@ export class TeachersService {
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async createTeacher(contactData: any): Promise<Teacher> {
+  async createTeacher(data: any): Promise<Teacher> {
     try {
       const newTeacher = await this.teachersRepository.save({
-        lastName: 'Никитин',
+        login: 'test',
+        password: '12345',
+        employmentDate: '2010-11-03',
+        supervisedGroup: { groupName: 'ВМК-19-3' },
         contact: { phone: '+7-922-873-14-51' },
         disciplines: [
           { disciplineName: 'Математика' },

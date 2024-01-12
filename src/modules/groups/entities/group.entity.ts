@@ -1,6 +1,7 @@
-import { Entity, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import { Entity, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import { Student } from 'src/modules/students/entities/student.entity';
 import { Teacher } from 'src/modules/teachers/entities/teacher.entity';
+import { Lecture } from 'src/modules/lectures/entities/lecture.entity';
 
 @Entity()
 export class Group {
@@ -14,4 +15,7 @@ export class Group {
 
   @OneToOne(() => Teacher, (teacher) => teacher.supervisedGroup)
   curator: Teacher;
+
+  @ManyToOne(() => Lecture, (lecture) => lecture.studentGroups)
+  lecture: Lecture;
 }
