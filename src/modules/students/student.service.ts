@@ -1,11 +1,14 @@
 import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { PersonalDataService } from '../personal-data/personal-data.service';
 import { ContactsService } from '../contacts/contacts.service';
 import { Student } from './entities/student.entity';
+import { getStudentSearchingCondition } from '../helpers/getStudentSearchingCondition';
+import { getStudentSortingingCondition } from '../helpers/getStudentSortingingCondition';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { IStudentsQueryParams } from './typespaces/IStudentsQueryParams';
 
 @Injectable()
 export class StudentService {
@@ -71,16 +74,30 @@ export class StudentService {
     }
   }
 
-  async getAllStudents(): Promise<Student[]> {
+  async getAllStudents({
+    searchField,
+    searchString,
+    sortBy,
+    limit = '10',
+    page = '1',
+  }: IStudentsQueryParams): Promise<{ data: Student[]; total: number }> {
     try {
-      const allStudents = await this.studentRepository.find({
-        relations: {
-          personalData: true,
-          contact: true,
-          group: true,
-        },
-      });
-      return allStudents;
+      // TODO: Пока с намбером, но после валидации квериПараметров эта необходимость отпадёт. В принципе валидация ТайпОРМ уже не даст туда сунуть не-числовые или отрицательные значения
+      const offset = (Number(page) - 1) * Number(limit);
+      const findingSettings: FindManyOptions = {
+        relations: ['personalData', 'contact', 'group'],
+        where: getStudentSearchingCondition(searchField, searchString),
+        take: Number(limit),
+        skip: offset,
+        order: getStudentSortingingCondition(sortBy),
+      };
+
+      const [allStudents, total] =
+        await this.studentRepository.findAndCount(findingSettings);
+      return {
+        data: allStudents,
+        total,
+      };
     } catch (err) {
       throw new HttpException(err.message, err.status || 500);
     }
