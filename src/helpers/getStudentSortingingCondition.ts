@@ -1,4 +1,4 @@
-import { IStudentsQueryParams } from '../students/typespaces/IStudentsQueryParams';
+import { IStudentsQueryParams } from '../modules/students/typespaces/IStudentsQueryParams';
 
 export const getStudentSortingingCondition = (
   sortingCondition: IStudentsQueryParams['sortBy'],

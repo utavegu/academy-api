@@ -1,5 +1,5 @@
 import { ILike } from 'typeorm';
-import { IStudentsQueryParams } from '../students/typespaces/IStudentsQueryParams';
+import { IStudentsQueryParams } from '../modules/students/typespaces/IStudentsQueryParams';
 
 export const getStudentSearchingCondition = (
   targetField: IStudentsQueryParams['searchField'],
